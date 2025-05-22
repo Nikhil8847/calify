@@ -1,26 +1,50 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Color palette for Calify - a calorie tracking app with voice features.
+ * Defined for both light and dark modes to ensure proper theme support.
+ * Following Apple's Human Interface Guidelines for color contrast and accessibility.
  */
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// Primary brand colors
+const primaryGreen = '#4CAF50';
+const primaryDarkGreen = '#388E3C';
+
+// Accent colors 
+const accentLight = '#43A047';
+const accentDark = '#81C784';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#2E2E2E',
+    background: '#FFFFFF',
+    tint: primaryGreen,
+    icon: '#757575',
+    tabIconDefault: '#757575',
+    tabIconSelected: primaryGreen,
+    card: '#F5F5F5',
+    border: '#E0E0E0',
+    notification: '#FF3B30',
+    success: '#34C759',
+    warning: '#FF9500',
+    error: '#FF3B30',
+    calorieBudget: '#4CAF50',
+    calorieIntake: '#FF9800',
+    calorieBurn: '#2196F3',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: '#FFFFFF',
+    background: '#121212',
+    tint: accentDark,
+    icon: '#BABABA',
+    tabIconDefault: '#BABABA',
+    tabIconSelected: accentDark,
+    card: '#1E1E1E',
+    border: '#2C2C2C',
+    notification: '#FF453A',
+    success: '#30D158',
+    warning: '#FFD60A',
+    error: '#FF453A',
+    calorieBudget: '#81C784',
+    calorieIntake: '#FFB74D',
+    calorieBurn: '#64B5F6',
   },
 };
