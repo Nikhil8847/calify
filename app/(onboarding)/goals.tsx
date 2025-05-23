@@ -62,7 +62,7 @@ export default function EffortlessTracking() {
         entering={FadeIn.duration(800).delay(300)}
       >
         <Image
-          source={require("@/assets/images/welcome-illustration1.png")}
+          source={require("@/assets/images/welcome-illustration2.png")}
           style={styles.illustration}
           contentFit="contain"
         />
@@ -76,7 +76,7 @@ export default function EffortlessTracking() {
           lightColor="#FFFFFF"
           darkColor="#FFFFFF"
         >
-          Effortless Tracking
+          Goal Setting
         </ThemedText>
 
         <ThemedText
@@ -84,7 +84,7 @@ export default function EffortlessTracking() {
           lightColor="#A0A0A0"
           darkColor="#A0A0A0"
         >
-          Easily log your meals, snacks{"\n"}and water intake
+          Set realistic goal and watch{"\n"}your progress unfold
         </ThemedText>
 
         {/* Progress indicator */}
