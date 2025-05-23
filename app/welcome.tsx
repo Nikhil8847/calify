@@ -1,10 +1,10 @@
-import { Image } from 'expo-image';
-import { router } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useRef } from "react";
+import { Animated, StyleSheet, TouchableWithoutFeedback } from "react-native";
 
-import { ThemedView } from '@/components/ThemedView';
+import { ThemedView } from "@/components/ThemedView";
 
 export default function WelcomeScreen() {
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -29,17 +29,17 @@ export default function WelcomeScreen() {
 
   // Navigate to main app after logo is tapped
   const handleLogoPress = () => {
-    router.replace("/(onboarding)/welcome");
+    router.replace("/(onboarding)");
   };
 
   return (
     <ThemedView style={styles.container}>
       <StatusBar style="auto" />
-      
+
       <TouchableWithoutFeedback onPress={handleLogoPress}>
         <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
           <Image
-            source={require('@/assets/images/apple_logo.png')}
+            source={require("@/assets/images/apple_logo.png")}
             style={styles.logo}
             contentFit="contain"
           />
@@ -52,8 +52,8 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   logo: {
     width: 200,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
