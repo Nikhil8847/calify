@@ -174,6 +174,12 @@ export default function MainDashboard() {
           titleText="left"
           titleColor="#FFFFFF"
         />
+        <VoiceButton
+          onStartRecording={handleStartRecording}
+          onStopRecording={handleStopRecording}
+          isProcessing={isProcessingVoice}
+          size={65}
+        />
         <View style={styles.voiceContainer}>
           <TouchableOpacity
             style={styles.helpButton}
@@ -312,12 +318,7 @@ export default function MainDashboard() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <VoiceButton
-        onStartRecording={handleStartRecording}
-        onStopRecording={handleStopRecording}
-        isProcessing={isProcessingVoice}
-        size={65}
-      />
+
       {/* Bottom Navigation Bar */}
       {/* <View style={styles.bottomNav}>
         <TouchableOpacity>

@@ -254,8 +254,8 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
       await recorder.stop();
 
       // Get the recording status to get the file URL
-      const status = recorder.getStatus();
-      const recordingUrl = status.url;
+      //   const status = recorder.getStatus();
+      const recordingUrl = recorder.uri;
 
       console.log("Recording stopped, file available at:", recordingUrl);
 
