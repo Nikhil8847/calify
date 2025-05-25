@@ -61,7 +61,7 @@ const screens: OnboardingScreen[] = [
 export default function OnboardingCarouselScreen() {
   // Use router directly for navigation to main app
   const handleComplete = () => {
-    router.replace("/(tabs)");
+    router.replace("/(tabs)/MainDashboard");
   };
 
   return <OnboardingCarousel screens={screens} onComplete={handleComplete} />;

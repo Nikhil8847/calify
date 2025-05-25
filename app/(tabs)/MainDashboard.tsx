@@ -1,7 +1,6 @@
 import Instructions from "@/components/Instructions";
 import MacroNutrients from "@/components/MacroNutrients";
 import ProgressView from "@/components/ProgressView/ProgressView";
-import VoiceButton from "@/components/VoiceButton";
 import { TranscriptionResponse } from "@/services/audioService";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -168,18 +167,13 @@ export default function MainDashboard() {
         <ProgressView
           value={caloriesConsumed}
           max={dailyGoal}
-          color="#30D07B"
+          color="#FFFFFF"
           unit="cals"
           showCircular={true}
           titleText="left"
           titleColor="#FFFFFF"
         />
-        <VoiceButton
-          onStartRecording={handleStartRecording}
-          onStopRecording={handleStopRecording}
-          isProcessing={isProcessingVoice}
-          size={65}
-        />
+
         <View style={styles.voiceContainer}>
           <TouchableOpacity
             style={styles.helpButton}

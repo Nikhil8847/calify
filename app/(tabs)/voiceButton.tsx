@@ -1,14 +1,9 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ProgressScreen() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Progress</Text>
-      <Text style={styles.description}>Track your progress over time.</Text>
-    </SafeAreaView>
-  );
+export default function voiceButton() {
+  return <SafeAreaView style={styles.container}></SafeAreaView>;
 }
 
 const styles = StyleSheet.create({

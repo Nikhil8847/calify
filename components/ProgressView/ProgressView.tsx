@@ -17,7 +17,7 @@ const ProgressView: React.FC<ProgressViewProps> = ({
   label = "",
   value,
   max,
-  color = "#00A86B",
+  color = "#FFFFFF",
   unit = "g",
   showCircular = false,
   titleText = "left",
@@ -34,8 +34,8 @@ const ProgressView: React.FC<ProgressViewProps> = ({
             value={percent}
             radius={60}
             duration={1000}
-            activeStrokeWidth={12}
-            inActiveStrokeWidth={12}
+            activeStrokeWidth={3}
+            inActiveStrokeWidth={3}
             inActiveStrokeColor="#FFFFFF"
             activeStrokeColor={color}
             inActiveStrokeOpacity={0.2}
