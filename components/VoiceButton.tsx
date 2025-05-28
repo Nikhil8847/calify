@@ -48,6 +48,7 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
     : "audio.m4a";
 
   // Initialize the audio recorder with recording options
+
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY, (status) => {
     // This is the status listener that gets called when recording status changes
     console.log("Recording status changed:", status);

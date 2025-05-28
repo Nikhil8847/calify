@@ -153,9 +153,9 @@ def process_audio_view(request):
             # Convert audio to proper format for Google STT
             audio_segment = AudioSegment.from_file(tmp_file_path, format='m4a')
             audio_segment = audio_segment.set_frame_rate(16000).set_channels(1)
-            wav_path = tmp_file_path.replace('.wav', '_converted.wav')
+            wav_path = tmp_file_path.replace('.m4a', '.wav')
             audio_segment.export(wav_path, format='wav')
-            
+
             # Transcribe audio
             transcription = transcribe_audio_google(wav_path)
             
@@ -203,7 +203,7 @@ def transcribe_audio_google(file_path):
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
-            language_code='en-US',
+            language_code='en-US'
         )
         
         response = client.recognize(config=config, audio=audio)

@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,11 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+print("BASE DIRECTORY IS", BASE_DIR)
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-t8%ra*iobrlfaikx18k4l55sp*%np%eo)_#^znrsm^l(^x$dgt"
-
+SECRET_KEY = env('SECRET_KEY')
+GOOGLE_APPLICATION_CREDENTIALS=env("GOOGLE_APPLICATION_CREDENTIALS")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -124,3 +130,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Allow local development
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = GOOGLE_APPLICATION_CREDENTIALS
