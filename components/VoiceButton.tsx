@@ -1,8 +1,6 @@
-import {
-  mockProcessAudio,
-  TranscriptionResponse,
-} from "@/services/audioService";
+import { TranscriptionResponse } from "@/services/audioService";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 import {
   RecordingPresets,
   requestRecordingPermissionsAsync,
@@ -33,7 +31,7 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
   onStopRecording,
   isProcessing = false,
   size = 100,
-  apiUrl = "http://127.0.0.1:5000/upload",
+  apiUrl = "http://localhost:8000/api/process-audio/",
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [animation] = useState(new Animated.Value(1));
@@ -279,8 +277,6 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
         // Continue without file data, since we're using mock response anyway
       }
 
-      // Convert to format for proper processing
-      // Create a properly typed audio blob for React Native FormData
       const audioBlob = recordingUrl
         ? ({
             uri: recordingUrl,
@@ -288,20 +284,22 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
             type: "audio/m4a",
           } as any)
         : null; // Use type assertion to avoid TypeScript errors
-
-      if (audioBlob) {
-        const formData = new FormData();
-        formData.append("file", audioBlob);
-      }
+      console.log("recordingUrl:", recordingUrl);
+      const formData = new FormData();
+      formData.append("file", audioBlob);
 
       try {
         // Just use mock API for now to avoid network issues
         // We're simulating processing the audio without actually sending it
-        const response = await mockProcessAudio();
+        const response = await axios.post(`${apiUrl}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-        setTranscription(response);
+        setTranscription(response as any);
         console.log("Mock transcription:", response);
-        onStopRecording?.(response);
+        onStopRecording?.(response as any);
       } catch (error) {
         console.error("Error processing audio:", error);
         onStopRecording?.();
