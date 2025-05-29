@@ -1,6 +1,6 @@
 # Calorie Tracker Backend
 
-A clean, simple Django REST API for calorie tracking with email/password authentication.
+A Django REST API for calorie tracking with AI-powered voice recognition using OpenAI Whisper and ChatGPT.
 
 ## Features
 
@@ -10,6 +10,13 @@ A clean, simple Django REST API for calorie tracking with email/password authent
   - Login/logout with token-based authentication
   - Protected API endpoints
   - User profile management
+
+- ✅ **AI-Powered Voice Food Tracking**
+
+  - Audio transcription using OpenAI Whisper
+  - Smart food extraction using ChatGPT
+  - Automatic nutrition calculation
+  - Meal type classification
 
 - ✅ **Food Tracking**
 
@@ -33,6 +40,10 @@ A clean, simple Django REST API for calorie tracking with email/password authent
 - `POST /api/auth/login/` - Login user
 - `POST /api/auth/logout/` - Logout user (requires token)
 - `GET /api/auth/profile/` - Get user profile (requires token)
+
+### Voice Processing
+
+- `POST /api/process-audio/` - Process audio recording and extract food data
 
 ### Food Tracking
 

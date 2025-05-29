@@ -1,12 +1,14 @@
 from datetime import date
 from django.db.models import Sum
+from django.conf import settings
 from rest_framework import status, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import tempfile
 import os
 import json
-from google.cloud import speech
+import openai
+import re
 from pydub import AudioSegment
 from .models import FoodItem, CalorieEntry, DailyGoal
 from .serializers import FoodItemSerializer, CalorieEntrySerializer, DailyGoalSerializer
@@ -133,7 +135,7 @@ class DailyGoalDetailView(generics.RetrieveUpdateAPIView):
 @api_view(['POST'])
 def process_audio_view(request):
     """
-    Process audio recording and extract food items using Google STT + simple parsing
+    Process audio recording and extract food items using OpenAI Whisper + ChatGPT
     """
     audio_file = request.FILES.get('file')
     if not audio_file:
@@ -150,36 +152,34 @@ def process_audio_view(request):
             tmp_file_path = tmp_file.name
         
         try:
-            # Convert audio to proper format for Google STT
-            audio_segment = AudioSegment.from_file(tmp_file_path, format='m4a')
-            audio_segment = audio_segment.set_frame_rate(16000).set_channels(1)
-            wav_path = tmp_file_path.replace('.m4a', '.wav')
-            audio_segment.export(wav_path, format='wav')
-
-            # Transcribe audio
-            transcription = transcribe_audio_google(wav_path)
+            # Transcribe audio using OpenAI Whisper
+            transcription = transcribe_audio_whisper(tmp_file_path)
             
-            # Extract food items using simple parsing
-            food_items = extract_food_items_simple(transcription)
+            # Extract structured food data using ChatGPT
+            structured_data = extract_food_data_with_gpt(transcription)
             
             # Clean up temporary files
             os.unlink(tmp_file_path)
-            os.unlink(wav_path)
             
             return Response({
+                'success': True,
                 'transcription': transcription,
-                'confidence': 0.85,  # Mock confidence for now
+                'food': structured_data.get('food', 'unknown food'),
+                'meal': structured_data.get('meal', 'snack'),
+                'details': structured_data.get('details', {
+                    'protein': 0,
+                    'carbs': 0,
+                    'fat': 0
+                }),
+                'confidence': structured_data.get('confidence', 0.85),
                 'timestamp': int(date.today().strftime('%s')) * 1000,
-                'food_items': food_items,
-                'calories': sum(item['calories'] * item['quantity'] for item in food_items)
+                'calories': structured_data.get('calories', 0)
             })
             
         except Exception as e:
             # Clean up on error
             if os.path.exists(tmp_file_path):
                 os.unlink(tmp_file_path)
-            if 'wav_path' in locals() and os.path.exists(wav_path):
-                os.unlink(wav_path)
             raise e
             
     except Exception as e:
@@ -189,93 +189,168 @@ def process_audio_view(request):
         )
 
 
-def transcribe_audio_google(file_path):
+def transcribe_audio_whisper(file_path):
     """
-    Transcribe audio using Google Cloud Speech-to-Text
+    Transcribe audio using OpenAI Whisper
     """
     try:
-        client = speech.SpeechClient()
-        
+        # Initialize OpenAI client
+        api_key = getattr(settings, 'OPENAI_API_KEY', os.environ.get('OPENAI_API_KEY'))
+        if not api_key:
+            raise Exception("OpenAI API key not configured")
+
+        client = openai.OpenAI(api_key=api_key)
+
         with open(file_path, 'rb') as audio_file:
-            content = audio_file.read()
-        
-        audio = speech.RecognitionAudio(content=content)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
-            language_code='en-US'
-        )
-        
-        response = client.recognize(config=config, audio=audio)
-        
-        if not response.results:
-            return "No speech detected"
-        
-        # Get the best transcription
-        transcription = response.results[0].alternatives[0].transcript
+            transcription = client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file,
+                response_format="text"
+            )
+
         return transcription
-        
+
     except Exception as e:
+        print(f"Whisper transcription error: {e}")
         # Fallback transcription for development
         fallback_transcriptions = [
             "I had a banana and a cup of coffee for breakfast",
             "Had a chicken salad with olive oil dressing",
             "Ate two slices of pizza for lunch",
-            "Had an apple and some almonds as a snack"
+            "Had an apple and some almonds as a snack",
+            "I just finished eating grilled salmon with vegetables"
         ]
         import random
         return random.choice(fallback_transcriptions)
 
 
-def extract_food_items_simple(transcription):
+def extract_food_data_with_gpt(transcription):
     """
-    Extract structured food data using simple keyword matching
+    Extract structured food data using ChatGPT
     """
-    # Simple food database for demo
-    food_db = {
-        'banana': {'calories': 105, 'protein': 1.3, 'carbs': 27, 'fat': 0.4},
-        'apple': {'calories': 95, 'protein': 0.5, 'carbs': 25, 'fat': 0.3},
-        'coffee': {'calories': 2, 'protein': 0.3, 'carbs': 0, 'fat': 0},
-        'chicken': {'calories': 165, 'protein': 31, 'carbs': 0, 'fat': 3.6},
-        'salad': {'calories': 20, 'protein': 1, 'carbs': 4, 'fat': 0.2},
-        'pizza': {'calories': 285, 'protein': 12, 'carbs': 36, 'fat': 10},
-        'almonds': {'calories': 160, 'protein': 6, 'carbs': 6, 'fat': 14},
-        'rice': {'calories': 205, 'protein': 4.3, 'carbs': 45, 'fat': 0.4},
-        'bread': {'calories': 79, 'protein': 2.7, 'carbs': 13, 'fat': 1.1},
-        'milk': {'calories': 42, 'protein': 3.4, 'carbs': 5, 'fat': 1},
-    }
-    
+    try:
+        # Initialize OpenAI client
+        api_key = getattr(settings, 'OPENAI_API_KEY', os.environ.get('OPENAI_API_KEY'))
+        if not api_key:
+            raise Exception("OpenAI API key not configured")
+
+        client = openai.OpenAI(api_key=api_key)
+
+        system_prompt =  f"""
+        You are a health and nutrition assistant helping users track their meals by analyzing transcripts from their voice input.
+        
+        Extract a structured JSON object containing:
+        
+        - meal: one of ["breakfast", "lunch", "dinner", "snack", "unknown"]
+        - items: list of food items the user consumed. Each item should include:
+          - name: food name (standardized, e.g., "banana", "paneer")
+          - quantity: number or estimated quantity
+          - unit: "grams", "ml", "pieces", "bowl", "cup", etc.
+          - estimated_weight_g: inferred weight in grams (for consistency)
+          - preparation: "cooked", "raw", "boiled", "fried", etc.
+          - estimated_calories
+          - macros:
+            - protein_g
+            - carbs_g
+            - fat_g
+        
+        - total_estimated_calories: sum of calories
+        
+        Use common nutrition knowledge (USDA/HealthifyMe-like DB).
+        If anything is vague (like "some rice"), estimate based on common serving sizes.
+        
+        Return only valid JSON.
+        """
+
+
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Transcription: {transcription}"}
+            ],
+            temperature=0.3,
+            max_tokens=300
+        )
+
+        # Parse the JSON response
+        response_text = response.choices[0].message.content
+        json_str = response_text.strip()
+        json_str = re.sub(r"^```json\n", "", json_str)
+        json_str = re.sub(r"\n```$", "", json_str)
+        json_str = re.sub(r"^```[\w]*\n", "", json_str)  # generic code block
+        try:
+            structured_data = json.loads(json_str)
+            return structured_data
+        except json.JSONDecodeError:
+            # If JSON parsing fails, return a default structure
+            return create_fallback_food_data(transcription)
+
+    except Exception as e:
+        print(f"ChatGPT processing error: {e}")
+        return create_fallback_food_data(transcription)
+
+
+def create_fallback_food_data(transcription):
+    """
+    Create fallback structured data when GPT processing fails
+    """
+    # Simple keyword-based fallback
     transcription_lower = transcription.lower()
-    found_items = []
     
-    for food_name, nutrition in food_db.items():
-        if food_name in transcription_lower:
-            # Simple quantity extraction
-            quantity = 1.0  # Default quantity
-            
-            # Look for numbers before the food name
-            words = transcription_lower.split()
-            try:
-                food_index = words.index(food_name)
-                if food_index > 0:
-                    prev_word = words[food_index - 1]
-                    if prev_word.replace('.', '').isdigit():
-                        quantity = float(prev_word)
-                    elif prev_word in ['two', 'three', 'four', 'five']:
-                        quantity = {'two': 2, 'three': 3, 'four': 4, 'five': 5}[prev_word]
-            except (ValueError, IndexError):
-                pass
-            
-            found_items.append({
-                'name': food_name.title(),
-                'quantity': quantity,
-                'calories': nutrition['calories'],
-                'protein': nutrition['protein'],
-                'carbs': nutrition['carbs'],
-                'fat': nutrition['fat']
-            })
+    # Default values
+    food = "unknown food"
+    meal = "snack"
+    calories = 150
+    protein = 5
+    carbs = 20
+    fat = 5
     
-    return found_items
+    # Simple food detection
+    if any(word in transcription_lower for word in ['banana', 'apple', 'fruit']):
+        food = "fruit"
+        calories = 95
+        protein = 1
+        carbs = 25
+        fat = 0
+    elif any(word in transcription_lower for word in ['chicken', 'meat', 'protein']):
+        food = "chicken"
+        calories = 165
+        protein = 31
+        carbs = 0
+        fat = 4
+    elif any(word in transcription_lower for word in ['pizza', 'bread', 'pasta']):
+        food = "pizza slice"
+        calories = 285
+        protein = 12
+        carbs = 36
+        fat = 10
+    elif any(word in transcription_lower for word in ['salad', 'vegetables', 'greens']):
+        food = "salad"
+        calories = 50
+        protein = 3
+        carbs = 8
+        fat = 1
+    
+    # Simple meal classification
+    if any(word in transcription_lower for word in ['breakfast', 'morning']):
+        meal = "breakfast"
+    elif any(word in transcription_lower for word in ['lunch', 'noon']):
+        meal = "lunch"
+    elif any(word in transcription_lower for word in ['dinner', 'evening']):
+        meal = "dinner"
+    
+    return {
+        "food": food,
+        "meal": meal,
+        "calories": calories,
+        "details": {
+            "protein": protein,
+            "carbs": carbs,
+            "fat": fat
+        },
+        "confidence": 0.6
+    }
 
 
 @api_view(['GET'])

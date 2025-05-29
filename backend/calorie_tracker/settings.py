@@ -28,10 +28,14 @@ print("BASE DIRECTORY IS", BASE_DIR)
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-GOOGLE_APPLICATION_CREDENTIALS=env("GOOGLE_APPLICATION_CREDENTIALS")
-# SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = []
+# OpenAI API Configuration
+OPENAI_API_KEY = env('OPENAI_API_KEY', default='')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env('DEBUG', default=True)
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -127,9 +131,3 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-# Allow local development
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
-
-
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = GOOGLE_APPLICATION_CREDENTIALS
