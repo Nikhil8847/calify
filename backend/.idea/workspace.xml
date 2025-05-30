@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="129cb9f1-07de-4d96-8848-019912380630" name="Changes" comment="">
+    <list default="true" id="129cb9f1-07de-4d96-8848-019912380630" name="Changes" comment="adding openai whisper for STT">
+      <change beforePath="$PROJECT_DIR$/../app/(tabs)/MainDashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/(tabs)/MainDashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/calorie_tracker/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/calorie_tracker/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/food_tracking/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/food_tracking/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/LineProgress.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../components/LineProgress.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/MacroNutrients.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../components/MacroNutrients.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,15 +29,15 @@
     <option name="showLibraryContents" value="true" />
     <option name="sortKey" value="BY_TIME_DESCENDING" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Run Server.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/n0s0dx9/calify/backend",
-    "settings.editor.selected.configurable": "http.proxy"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Run Server.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/n0s0dx9/calify/backend&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Run Server" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="backend" />
@@ -73,40 +76,73 @@
       <option name="presentableId" value="Default" />
       <updated>1748210857555</updated>
     </task>
+    <task id="LOCAL-00001" summary="adding openai whisper for STT">
+      <option name="closed" value="true" />
+      <created>1748561998432</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1748561998432</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="adding openai whisper for STT" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding openai whisper for STT" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
-          <line>137</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
-          <line>196</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
-          <line>159</line>
+          <line>156</line>
           <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
-          <line>201</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
-          <line>162</line>
-          <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
-          <line>215</line>
-          <option name="timeStamp" value="14" />
+          <line>139</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>210</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>158</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>230</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>161</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>265</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>238</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>281</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/food_tracking/views.py</url>
+          <line>283</line>
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

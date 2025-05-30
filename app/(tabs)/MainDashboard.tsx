@@ -1,4 +1,3 @@
-import Instructions from "@/components/Instructions";
 import MacroNutrients from "@/components/MacroNutrients";
 import ProgressView from "@/components/ProgressView/ProgressView";
 import { TranscriptionResponse } from "@/services/audioService";
@@ -44,7 +43,6 @@ export default function MainDashboard() {
   const [isProcessingVoice, setIsProcessingVoice] = useState(false);
   const [caloriesConsumed, setCaloriesConsumed] = useState(325);
   const [dailyGoal] = useState(1200);
-  const [showInstructions, setShowInstructions] = useState(false);
   const [macros, setMacros] = useState<MacroData>({
     protein: 20, // grams
     carbs: 30, // grams
@@ -69,10 +67,6 @@ export default function MainDashboard() {
   };
 
   // Function to toggle instructions modal
-  const toggleInstructions = () => {
-    setShowInstructions((prev) => !prev);
-  };
-
   const handleStopRecording = (transcriptionData?: TranscriptionResponse) => {
     console.log("Stopped recording voice...", transcriptionData);
     setIsProcessingVoice(true);
@@ -173,21 +167,6 @@ export default function MainDashboard() {
           titleText="left"
           titleColor="#FFFFFF"
         />
-
-        <View style={styles.voiceContainer}>
-          <TouchableOpacity
-            style={styles.helpButton}
-            onPress={toggleInstructions}
-          >
-            <Ionicons name="help-circle" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.metricsRow}>
-          <Text style={styles.metric}>Eaten: {caloriesConsumed}</Text>
-          <Text style={styles.metric}>Burned: 122</Text>
-        </View>
-
-        {/* Macro Nutrients */}
         <View style={styles.macrosContainer}>
           <MacroNutrients
             protein={macros.protein}
@@ -197,9 +176,6 @@ export default function MainDashboard() {
           />
         </View>
       </View>
-
-      {/* Voice Instructions Modal */}
-      <Instructions visible={showInstructions} onClose={toggleInstructions} />
 
       {/* Date Picker */}
       <View style={styles.datePicker}>

@@ -14,7 +14,7 @@ interface LineProgressProps {
 const LineProgress: React.FC<LineProgressProps> = ({
   value,
   max,
-  color = "#30D07B",
+  color = "#ffffff",
   height = 8,
   backgroundColor = "#E0E0E0",
   borderRadius = 4,

@@ -30,7 +30,6 @@ const MacroNutrients: React.FC<MacroNutrientProps> = ({
           label="protein"
           value={protein}
           max={total || 100}
-          color="#5D5FEF"
           height={8}
         />
         {showPercentage && (
@@ -43,20 +42,13 @@ const MacroNutrients: React.FC<MacroNutrientProps> = ({
           label="carbs"
           value={carbs}
           max={total || 100}
-          color="#FF9800"
           height={8}
         />
         {showPercentage && <Text style={styles.percentage}>{carbsValue}%</Text>}
       </View>
 
       <View style={styles.row}>
-        <LineProgress
-          label="fat"
-          value={fat}
-          max={total || 100}
-          color="#E91E63"
-          height={8}
-        />
+        <LineProgress label="fat" value={fat} max={total || 100} height={8} />
         {showPercentage && <Text style={styles.percentage}>{fatValue}%</Text>}
       </View>
     </View>
